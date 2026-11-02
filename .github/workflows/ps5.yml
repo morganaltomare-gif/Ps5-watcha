@@ -1,0 +1,20 @@
+name: PS5 Pro stock check
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"   # every 10 minutes (UTC; irrelevant for intervals)
+  workflow_dispatch:          # lets you run it manually to test
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests
+      - run: python ps5_check.py
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
